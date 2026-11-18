@@ -1,0 +1,118 @@
+{
+  "name": "code-walkthrough",
+  "displayName": "Code Walkthrough (voice)",
+  "description": "Explain code out loud, line by line, with the line highlighted as it is spoken. Local Kokoro voice or browser voice.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Education",
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeWalkthrough.explainSelection",
+        "title": "Walkthrough: Explain this selection"
+      },
+      {
+        "command": "codeWalkthrough.stop",
+        "title": "Walkthrough: Stop"
+      },
+      {
+        "command": "codeWalkthrough.saveTour",
+        "title": "Walkthrough: Save as CodeTour (.tour)"
+      },
+      {
+        "command": "codeWalkthrough.playTour",
+        "title": "Walkthrough: Play a saved tour"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "codeWalkthrough.explainSelection",
+        "key": "ctrl+alt+w",
+        "mac": "cmd+alt+w",
+        "when": "editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "Code Walkthrough",
+      "properties": {
+        "codeWalkthrough.model": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "description": "Any OpenAI-compatible model id."
+        },
+        "codeWalkthrough.baseUrl": {
+          "type": "string",
+          "default": "http://localhost:11434/v1",
+          "description": "OpenAI-compatible endpoint. Ollama, vLLM, LM Studio, or api.openai.com/v1."
+        },
+        "codeWalkthrough.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Key for the endpoint, if it needs one."
+        },
+        "codeWalkthrough.ttsUrl": {
+          "type": "string",
+          "default": "http://localhost:8880/v1/audio/speech",
+          "description": "OpenAI-compatible speech endpoint (Kokoro-FastAPI, Speaches). Leave blank to use the browser voice."
+        },
+        "codeWalkthrough.voiceBackend": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "kokoro",
+            "none"
+          ],
+          "default": "kokoro",
+          "description": "openai = any /v1/audio/speech server (Kokoro-FastAPI, Speaches, LocalAI, OpenAI, VoiceStudio). kokoro = fully offline via the bundled Python runner. none = silent, paced highlight."
+        },
+        "codeWalkthrough.ttsModel": {
+          "type": "string",
+          "default": "kokoro",
+          "description": "TTS model id for the openai backend."
+        },
+        "codeWalkthrough.voice": {
+          "type": "string",
+          "default": "af_heart",
+          "description": "Voice id (Kokoro: af_heart, af_bella, bf_emma, am_michael; VoiceStudio: a voice-profile id or preset)."
+        },
+        "codeWalkthrough.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Python used for the offline kokoro backend."
+        },
+        "codeWalkthrough.localVoiceScript": {
+          "type": "string",
+          "default": "",
+          "description": "Path to media/tts_server.py (bundled with the extension)."
+        },
+        "codeWalkthrough.ambience": {
+          "type": "boolean",
+          "default": false,
+          "description": "Play a soft loop while the walkthrough runs (webview player)."
+        },
+        "codeWalkthrough.modelProvider": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "vscode",
+            "endpoint"
+          ],
+          "default": "auto",
+          "description": "auto: use VS Code's Language Model API (your Copilot subscription, no key) and fall back to the endpoint. vscode: Copilot only. endpoint: your own OpenAI-compatible URL."
+        },
+        "codeWalkthrough.wordLevel": {
+          "type": "boolean",
+          "default": false,
+          "description": "Highlight each word inside the line as it is spoken. Needs `pip install faster-whisper`; adds ~0.05x real-time CPU per beat. Measured RTF 0.05 (14.8 s aligned in 0.8 s)."
+        }
+      }
+    }
+  }
+}

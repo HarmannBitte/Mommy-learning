@@ -1,0 +1,4 @@
+// Before first paint, so a night-time visit never flashes white. A file rather than an inline script, so the CSP can refuse every inline script.
+// The waitlist always opens light (see ThemeSwitch in Waitlist.tsx): at /waitlist, and on the public site (marked data-site) at
+// every address but the sample lessons and Settings, as the site shows the waitlist at all the others.
+try { const p = location.pathname, site = document.documentElement.hasAttribute("data-site"), waitlist = p === "/waitlist" || (site && !/^\/(demo|settings)(\/|$)/.test(p)); const t = waitlist ? "light" : localStorage.getItem("mommy.theme"); if (t) document.documentElement.dataset.theme = t; if (localStorage.getItem("mommy.motion") === "reduced") document.documentElement.dataset.motion = "reduced"; if (localStorage.getItem("mommy.tones") === "on") document.documentElement.dataset.tones = "on"; } catch {}

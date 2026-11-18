@@ -1,0 +1,5 @@
+START HERE
+
+Read notes/README.md, then notes/VALIDATION.md and notes/the-stack.md. They supersede conflicting historical notes. The research includes available old snapshots, three newly recovered source checkouts with commit IDs, prototype code and tests, and audio samples.
+
+This is an audited work-in-progress, not a finished product. Models and dependencies are not bundled; exact earlier benchmark environments cannot be reconstructed. The prototype has known playback and tour limitations. M1 and GPU tests and human listening are outstanding. See notes/VALIDATION.md.

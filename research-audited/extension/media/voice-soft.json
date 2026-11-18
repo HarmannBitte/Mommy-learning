@@ -1,0 +1,21 @@
+{
+  "text": "Okay. You can let your shoulders drop now. [sigh] Nothing here is urgent. Just breathe, and listen.",
+  "voice": "af_sky",
+  "speed": 0.85,
+  "tags": [
+    "[sigh]",
+    "[sniff]",
+    "[gasp]",
+    "[cough]",
+    "[shush]",
+    "[groan]",
+    "[chuckle]",
+    "[laugh]"
+  ],
+  "post": {
+    "lowpass_hz": 7000,
+    "lowshelf_hz": 110,
+    "lowshelf_db": 2.5,
+    "peak": 0.85
+  }
+}

@@ -1,0 +1,43 @@
+{
+	"name": "whiteboard-tutor",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"author": {
+		"name": "Elijah Dalelio"
+	},
+	"type": "module",
+	"scripts": {
+		"test": "vitest run",
+		"typecheck:extension": "tsc --noEmit -p extension/tsconfig.json",
+		"build:extension": "node extension/build.mjs",
+		"watch:extension": "node extension/build.mjs --watch",
+		"package:extension": "npm run build:extension && node extension/package.mjs"
+	},
+	"dependencies": {
+		"@ai-sdk/google": "^2.0.74",
+		"@ai-sdk/groq": "^2.0.57",
+		"ai": "^5.0.194",
+		"zod": "^4.1.8"
+	},
+	"devDependencies": {
+		"@types/chrome": "^0.3.4",
+		"@types/node": "^22.0.0",
+		"esbuild": "^0.28.1",
+		"typescript": "^5.8.3",
+		"vitest": "^5.0.3"
+	},
+	"description": "Study Buddy — circle anything on a webpage, speak, and get a real computed visualization. Chrome extension, bring your own Gemini/Groq API key, no shared backend.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Deli-oi/whiteboard-tutor.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Deli-oi/whiteboard-tutor/issues"
+	},
+	"homepage": "https://github.com/Deli-oi/whiteboard-tutor#readme",
+	"keywords": ["browser-extension", "voice", "ai", "gemini", "speech-recognition", "chrome-extension"],
+	"allowScripts": {
+		"esbuild@0.28.1": true
+	}
+}

@@ -1,0 +1,15 @@
+.env*
+!.env.example
+node_modules
+.next
+.vercel
+.duo/*.json
+*.tsbuildinfo
+.DS_Store
+.claude/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Supabase CLI link state
+supabase/.temp/

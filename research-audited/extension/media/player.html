@@ -1,0 +1,62 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Walkthrough audio</title>
+<!-- Real audio needs a webview: VS Code extensions have no speech/audio API.
+     The extension posts {wav: base64, ambience: bool} and this page plays it. -->
+<style>
+  body{margin:0;font:13px var(--vscode-font-family);color:var(--vscode-foreground);
+       background:transparent;display:flex;align-items:center;gap:10px;padding:8px 12px}
+  #bar{flex:1;height:4px;border-radius:2px;background:var(--vscode-progressBar-background, #4443);overflow:hidden}
+  #fill{height:100%;width:0;background:var(--vscode-progressBar-background,#0a7);transition:width .12s linear}
+  button{font:inherit;background:var(--vscode-button-background);color:var(--vscode-button-foreground);
+         border:0;border-radius:3px;padding:3px 10px;cursor:pointer}
+  #said{max-width:46ch;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+<span>🔊</span><span id="said">waiting…</span>
+<div id="bar"><div id="fill"></div></div><button id="stop">Stop</button>
+<audio id="a"></audio>
+<script>
+const vscode = acquireVsCodeApi();
+const a = document.getElementById('a'), fill = document.getElementById('fill'),
+      said = document.getElementById('said');
+let ambience = null;
+document.getElementById('stop').onclick = () => { a.pause(); post('stop'); };
+
+function post(type, extra) { vscode.postMessage({ type, ...extra }); }
+
+window.addEventListener('message', async (e) => {
+  const m = e.data;
+  if (m.type === 'say') {
+    said.textContent = m.text || '';
+    a.src = 'data:audio/wav;base64,' + m.wav;
+    try { await a.play(); } catch {}
+  }
+  if (m.type === 'ambience') startAmbience(m.on);
+  if (m.type === 'stop') { a.pause(); a.src = ''; }
+});
+
+a.addEventListener('timeupdate', () => {
+  if (a.duration) fill.style.width = (a.currentTime / a.duration * 100) + '%';
+});
+a.addEventListener('ended', () => { fill.style.width = '0'; post('done'); });
+
+// Soft procedural bed (brown noise + slow swell) — no assets, no network.
+function startAmbience(on) {
+  if (ambience) { ambience.stop(); ambience = null; }
+  if (!on) return;
+  const ctx = new AudioContext();
+  const len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < len; i++) {
+    const w = Math.random() * 2 - 1;
+    last = (last + 0.02 * w) / 1.02;
+    d[i] = last * 3.2 * 0.05;
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.loop = true;
+  const g = ctx.createGain(); g.gain.value = 0.18;
+  src.connect(g).connect(ctx.destination); src.start();
+  ambience = { stop: () => { try { src.stop(); ctx.close(); } catch {} } };
+}
+</script>
